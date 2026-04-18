@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MTT | Precision Trading Framework</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0f1e;
+            color: #eef2ff;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        nav {
+            background: rgba(10, 15, 30, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1e2a3e;
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f0b90b, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #cbd5e6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #f0b90b;
+        }
+        .btn-outline {
+            border: 1px solid #f0b90b;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            background: transparent;
+            color: #f0b90b;
+            font-weight: 600;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+        .btn-outline:hover {
+            background: #f0b90b;
+            color: #0a0f1e;
+        }
+        .btn-primary {
+            background: #f0b90b;
+            color: #0a0f1e;
+            padding: 0.75rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #ffcd4a;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #1e2a46;
+            color: white;
+            padding: 0.75rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+        .section {
+            padding: 5rem 0;
+            border-bottom: 1px solid #1e2a3e;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section-sub {
+            text-align: center;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: #111827;
+            border-radius: 24px;
+            padding: 1.8rem;
+            border: 1px solid #1f2a40;
+            transition: 0.2s;
+        }
+        .card:hover {
+            border-color: #f0b90b;
+            transform: translateY(-5px);
+        }
+        .broker-card {
+            background: #111827;
+            border-radius: 24px;
+            padding: 1.8rem;
+            border: 1px solid #1f2a40;
+            text-align: center;
+        }
+        .broker-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .commission-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        .commission-table th, .commission-table td {
+            border: 1px solid #1f2a40;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .commission-table th {
+            background: #0f172a;
+            color: #f0b90b;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .metric-card {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1.2rem;
+        }
+        .metric-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f0b90b;
+        }
+        .myfxbook-widget {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #2d3a5e;
+        }
+        .myfxbook-widget iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            border-radius: 12px;
+        }
+        .faq-item {
+            background: #111827;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            border: 1px solid #1f2a40;
+        }
+        .faq-question {
+            padding: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            padding: 0 1.2rem 1.2rem 1.2rem;
+            display: none;
+            color: #cbd5e6;
+            border-top: 1px solid #1f2a40;
+        }
+        .faq-question i {
+            transition: 0.2s;
+        }
+        .active-faq .faq-answer {
+            display: block;
+        }
+        footer {
+            background: #060b17;
+            padding: 3rem 0 2rem;
+            font-size: 0.85rem;
+            color: #7e8aa2;
+        }
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: #f0b90b;
+        }
+        .copyright {
+            text-align: center;
+        }
+        .pap-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .diagram-box {
+            background: #0f172a;
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-width: 140px;
+            border: 1px solid #2d3a5e;
+        }
+        .diagram-arrow {
+            font-size: 2rem;
+            align-self: center;
+            color: #f0b90b;
+        }
+        .entry-badge {
+            background: #1e293b;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            display: inline-block;
+            margin: 0.5rem 0.5rem 0 0;
+        }
+        .testimonial-card {
+            background: #111827;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #1f2a40;
+        }
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            background: #2d3a5e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .founder-section {
+            background: linear-gradient(135deg, #0f172a, #0a0f1e);
+            border-radius: 32px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #f0b90b30;
+        }
+        .email-capture {
+            background: #111827;
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+        .email-capture input {
+            padding: 12px 20px;
+            border-radius: 40px;
+            border: none;
+            width: 280px;
+            max-width: 100%;
+            margin-right: 10px;
+            background: #1e293b;
+            color: white;
+        }
+        .email-capture button {
+            padding: 12px 24px;
+        }
+        .trade-example {
+            background: #0f172a;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .trade-example img {
+            width: 100%;
+            display: block;
+        }
+        .trade-example .caption {
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid #1e2a3e;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .mobile-menu {
+                display: block;
+                font-size: 1.8rem;
+                cursor: pointer;
+            }
+            .nav-links.mobile-open {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                padding: 1rem 0;
+                gap: 1rem;
+            }
+        }
+        @media (min-width: 769px) {
+            .mobile-menu {
+                display: none;
+            }
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 0 2rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #f0b90b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        .ib-section {
+            background: #0f172a;
+            border-radius: 32px;
+            margin-top: 3rem;
+            padding: 2rem;
+        }
+        .ib-benefits {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .ib-benefit {
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+        }
+        .partner-button {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container nav-container">
+        <div class="logo">MTT</div>
+        <div class="mobile-menu" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="#performance">Performance</a>
+            <a href="#approach">Approach</a>
+            <a href="#services">Services</a>
+            <a href="#ib-partners">Partners</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a href="#access" class="btn-outline">Request Access</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <h1>Trade Structured Markets<br>with Institutional Precision</h1>
+            <p style="font-size: 1.2rem; max-width: 700px; margin: 1rem auto; color: #cbd5e6;">A rule-based multi-timeframe trading approach built on the MTT (Precision Action Framework) — focused on capital growth, risk control, and consistent execution.</p>
+            <div class="hero-buttons">
+                <a href="#performance" class="btn-primary">📊 View Performance</a>
+                <a href="#approach" class="btn-secondary">📘 Trading Approach</a>
+                <a href="#access" class="btn-secondary">🔒 Join Private Updates</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PERFORMANCE SECTION (REAL DATA) -->
+    <section id="performance" class="section">
+        <div class="container">
+            <h2 class="section-title">Verified Trading Performance</h2>
+            <p class="section-sub">Performance is driven by structured execution, strict risk management, and multi-timeframe confluence — not indicators or prediction.</p>
+            <div class="myfxbook-widget">
+                <!-- Replace with your actual Myfxbook widget code -->
+                <iframe src="https://www.myfxbook.com/widget/MTT_live/small?currency=USD&lang=en" title="Myfxbook Equity Curve"></iframe>
+                <p style="margin-top: 0.5rem;"><i class="fas fa-chart-line"></i> <a href="#" style="color:#f0b90b;">View live verified account →</a></p>
+                <p class="disclaimer" style="font-size:0.7rem;">*Past performance does not guarantee future results.</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card"><div class="metric-number">+18.4%</div><div>Last 3 Months</div></div>
+                <div class="metric-card"><div class="metric-number">8.2%</div><div>Max Drawdown</div></div>
+                <div class="metric-card"><div class="metric-number">67%</div><div>Win Rate</div></div>
+                <div class="metric-card"><div class="metric-number">1:1.8</div><div>Avg Risk/Reward</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRADING APPROACH (MTT METHOD) -->
+    <section id="approach" class="section">
+        <div class="container">
+            <h2 class="section-title">MTT Trading Framework</h2>
+            <div class="pap-diagram">
+                <div class="diagram-box"><strong>MPAP / WPAP</strong><br>Higher Timeframe Bias</div>
+                <div class="diagram-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="diagram-box"><strong>DPAP</strong><br>Daily Structure & Direction</div>
+                <div class="diagram-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="diagram-box"><strong>H4PAP</strong><br>Key Reaction Zones</div>
+                <div class="diagram-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="diagram-box"><strong>H1 Entry</strong><br>Breakout / Reversal</div>
+            </div>
+            <p style="text-align:center; margin-bottom: 2rem;">Multi-timeframe confluence: higher timeframe bias + H4 key levels + H1 trigger.</p>
+            
+            <div class="grid-2" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3>🔹 Step 1 – Higher Timeframe Bias</h3>
+                    <p>Monthly and weekly structure defines the dominant trend. No counter‑trend trades without strong confluence.</p>
+                </div>
+                <div class="card">
+                    <h3>🔹 Step 2 – Daily Structure (DPAP)</h3>
+                    <p>Identifies main move vs corrective move. The daily bias filters more than 60% of low‑probability setups.</p>
+                </div>
+                <div class="card">
+                    <h3>🔹 Step 3 – H4 Zones & Projections</h3>
+                    <p>Key reaction levels, midpoints, and projections (HP1, HP2, LP1, LP2). These are the structural triggers.</p>
+                </div>
+                <div class="card">
+                    <h3>🔹 Step 4 – Execution Timing (H1)</h3>
+                    <p>Breakouts, reversals, and inside‑bar consolidations. Trades are executed based on predefined structural conditions.</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Entry Types</h3>
+            <div>
+                <span class="entry-badge"><i class="fas fa-square"></i> Inside Bar (IB)</span>
+                <span class="entry-badge"><i class="fas fa-chart-simple"></i> Consolidation (CON)</span>
+                <span class="entry-badge"><i class="fas fa-arrow-right"></i> Non‑IB Breakout</span>
+                <span class="entry-badge"><i class="fas fa-waveform"></i> Reversal Patterns</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXECUTION MODEL (HIDES EA) -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Execution & Risk Model</h2>
+            <p class="section-sub">Trades are executed through a structured, rule‑based process designed to eliminate emotional decision‑making and ensure consistency across market conditions.</p>
+            <div class="grid-3">
+                <div class="card"><i class="fas fa-list-check" style="font-size: 2rem; color:#f0b90b;"></i><h3>Predefined Entry Conditions</h3><p>Every trade follows strict structural rules – no discretionary guesswork.</p></div>
+                <div class="card"><i class="fas fa-clock" style="font-size: 2rem; color:#f0b90b;"></i><h3>Session‑Based Execution</h3><p>Focus on high‑liquidity windows: London open, London‑NY overlap, and early NY.</p></div>
+                <div class="card"><i class="fas fa-shield-alt" style="font-size: 2rem; color:#f0b90b;"></i><h3>Automated Risk Protection</h3><p>Hard stops, break‑even moves, and trailing stops protect capital. System‑assisted risk management.</p></div>
+                <div class="card"><i class="fas fa-chart-line" style="font-size: 2rem; color:#f0b90b;"></i><h3>Multi‑Market Monitoring</h3><p>Scans multiple major pairs, respects max open exposure to avoid over‑trading.</p></div>
+            </div>
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color:#94a3b8;">The edge is the MTT framework — execution is system‑assisted, not discretionary.</p>
+        </div>
+    </section>
+
+    <!-- SERVICES (NEW BUSINESS MODEL) -->
+    <section id="services" class="section">
+        <div class="container">
+            <h2 class="section-title">Trading Services</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <i class="fas fa-newspaper" style="font-size: 2rem; color:#f0b90b;"></i>
+                    <h3>Private Trade Insights</h3>
+                    <p>Weekly market outlook, trade breakdowns, and structural bias notes — delivered directly.</p>
+                    <a href="#access" class="btn-outline" style="margin-top: 1rem; display: inline-block;">Request Access →</a>
+                </div>
+                <div class="card">
+                    <i class="fas fa-chalkboard-user" style="font-size: 2rem; color:#f0b90b;"></i>
+                    <h3>Mentorship (PAP/MTT Training)</h3>
+                    <p>Live sessions, trade reviews, and structured education on the MTT framework. Limited spots.</p>
+                    <a href="#contact" class="btn-outline" style="margin-top: 1rem; display: inline-block;">Inquire →</a>
+                </div>
+                <div class="card">
+                    <i class="fas fa-chart-simple" style="font-size: 2rem; color:#f0b90b;"></i>
+                    <h3>Capital Growth Program</h3>
+                    <p>For serious traders / investors. Application‑based, focused on structured capital appreciation.</p>
+                    <a href="#contact" class="btn-outline" style="margin-top: 1rem; display: inline-block;">Apply →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IB PARTNERS SECTION (XM + IC Markets) -->
+    <section id="ib-partners" class="section">
+        <div class="container">
+            <div class="ib-section">
+                <h2 class="section-title" style="margin-bottom: 0.5rem;">Trade Through a Preferred Broker</h2>
+                <p class="section-sub" style="margin-bottom: 2rem;">Partner with globally trusted brokers and earn cashback on every trade you take.</p>
+                
+                <div class="grid-2">
+                    <!-- XM Card -->
+                    <div class="broker-card">
+                        <div class="broker-logo"><i class="fas fa-chart-line"></i> XM</div>
+                        <h3>XM – Ultra‑Low Minimum Deposit</h3>
+                        <p>Start with just $5. XM offers a generous Introducing Broker (IB) program with up to <strong>$10 per lot</strong> rebate. Perfect for attracting new traders.</p>
+                        <ul style="text-align: left; margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>✔ Regulated by FCA, CySEC, ASIC</li>
+                            <li>✔ 1,000+ instruments (Forex, Stocks, Crypto)</li>
+                            <li>✔ Up to 888% bonus on deposits (terms apply)</li>
+                            <li>✔ Sub‑affiliate program (10% commission from your referrals)</li>
+                        </ul>
+                        <a href="#" class="btn-primary partner-button">Become XM IB →</a>
+                        <p style="font-size: 0.7rem; margin-top: 0.5rem;">Replace "#" with your XM partner link</p>
+                    </div>
+                    
+                    <!-- IC Markets Card -->
+                    <div class="broker-card">
+                        <div class="broker-logo"><i class="fas fa-water"></i> IC Markets</div>
+                        <h3>IC Markets – Raw Spreads from 0.0 Pips</h3>
+                        <p>True ECN broker with deep liquidity. Their IB program offers either <strong>Cost Per Action (CPA)</strong> up to $1,200 per client or <strong>Revenue Share</strong> up to 65.2%.</p>
+                        <ul style="text-align: left; margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>✔ Regulated by ASIC, CySEC, FSA</li>
+                            <li>✔ Raw spreads from 0.0 pips (commission from $3.50 per lot)</li>
+                            <li>✔ High‑volume traders – ideal for scalping and algorithmic strategies</li>
+                            <li>✔ Sub‑IB structure available</li>
+                        </ul>
+                        <a href="#" class="btn-primary partner-button">Become IC Markets IB →</a>
+                        <p style="font-size: 0.7rem; margin-top: 0.5rem;">Replace "#" with your IC Markets partner link</p>
+                    </div>
+                </div>
+
+                <!-- Commission Comparison Table -->
+                <h3 style="text-align: center; margin: 2rem 0 1rem;">IB Commission Comparison</h3>
+                <table class="commission-table">
+                    <thead>
+                        <tr><th>Feature</th><th>XM</th><th>IC Markets</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Commission Model</strong></td><td>Revenue Share (RevShare)</td><td>CPA or RevShare</td></tr>
+                        <tr><td><strong>Earning Potential</strong></td><td>Up to <strong>$10 per lot</strong></td><td>Up to <strong>$1,200 CPA</strong> or <strong>65.2% RevShare</strong></td></tr>
+                        <tr><td><strong>Key Benefit</strong></td><td>Ultra‑low $5 minimum deposit</td><td>Raw spreads from 0.0 pips</td></tr>
+                        <tr><td><strong>Best For</strong></td><td>Attracting new traders</td><td>High‑volume professional traders</td></tr>
+                        <tr><td><strong>Sub‑Affiliate Program</strong></td><td>10% commission on sub‑affiliates</td><td>Yes, Sub‑IB structure available</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="ib-benefits">
+                    <div class="ib-benefit"><i class="fas fa-wallet" style="font-size: 2rem; color:#f0b90b;"></i><h4>Earn Cashback</h4><p>Get paid every time your referred traders trade.</p></div>
+                    <div class="ib-benefit"><i class="fas fa-chart-line" style="font-size: 2rem; color:#f0b90b;"></i><h4>No Capital Required</h4><p>Zero risk IB program – just share your link.</p></div>
+                    <div class="ib-benefit"><i class="fas fa-users" style="font-size: 2rem; color:#f0b90b;"></i><h4>Build Your Network</h4><p>Create a passive income stream through sub‑affiliates.</p></div>
+                </div>
+
+                <p style="text-align: center; font-size: 0.85rem; margin-top: 1rem;">*Terms and conditions apply. IB commissions vary by region. Contact broker support for exact details.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF SECTION (TRADE EXAMPLES) -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Trade Examples</h2>
+            <p class="section-sub">Real trade breakdowns showing DPAP zone, H4 reaction, and H1 entry.</p>
+            <div class="grid-2">
+                <div class="trade-example">
+                    <img src="https://via.placeholder.com/600x300?text=Chart+Example+1:+DPAP+Zone+%26+H4+Reaction" alt="Trade example 1">
+                    <div class="caption">📉 DPAP resistance → H4 rejection → H1 sell entry</div>
+                </div>
+                <div class="trade-example">
+                    <img src="https://via.placeholder.com/600x300?text=Chart+Example+2:+H4+Support+%2B+IB+Breakout" alt="Trade example 2">
+                    <div class="caption">📈 H4 support zone + H1 inside bar breakout → buy trigger</div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">(Actual trade charts from live account – available to private access members)</p>
+        </div>
+    </section>
+
+    <!-- ABOUT (FOUNDER STORY) -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="founder-section">
+                <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center;">
+                    <div style="flex: 1; min-width: 200px; text-align: center;">
+                        <div style="width: 120px; height: 120px; background: #2d3a5e; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 3px solid #f0b90b;">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                    </div>
+                    <div style="flex: 2;">
+                        <h2 style="color:#f0b90b;">About the Trader</h2>
+                        <p>I started trading like most – with emotion, hope, and eventually a $5,000 loss. That loss forced me to rebuild from scratch. Over years of struggle, I developed the MTT framework: a structured, rule‑based approach that eliminates randomness.</p>
+                        <p style="margin-top: 1rem;">The MTT (Precision Action Trading) framework is the result of thousands of hours of backtesting and live execution. It focuses on multi‑timeframe confluence, strict risk management, and repeatable entries. Today, I trade full‑time using this method – and I share the framework with serious traders who want to stop guessing.</p>
+                        <div style="margin-top: 1rem;">
+                            <span style="background:#1e293b; padding: 4px 12px; border-radius: 20px;"><i class="fab fa-telegram"></i> Telegram</span>
+                            <span style="background:#1e293b; padding: 4px 12px; border-radius: 20px; margin-left: 10px;"><i class="fab fa-youtube"></i> YouTube</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMMUNITY / ACCESS -->
+    <section id="access" class="section">
+        <div class="container">
+            <h2 class="section-title">Private Access</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <i class="fab fa-telegram" style="font-size: 2rem; color:#f0b90b;"></i>
+                    <h3>Telegram Channel</h3>
+                    <p>Weekly trade insights, market bias, and structural updates. Not a signal service – educational content.</p>
+                    <a href="#" class="btn-outline" style="margin-top: 1rem;">Request Access →</a>
+                </div>
+                <div class="card">
+                    <i class="fas fa-envelope" style="font-size: 2rem; color:#f0b90b;"></i>
+                    <h3>Email List</h3>
+                    <p>Monthly performance report, framework updates, and exclusive trade breakdowns.</p>
+                    <div class="email-capture" style="background: transparent; padding: 0; margin-top: 1rem;">
+                        <form id="accessForm">
+                            <input type="email" placeholder="Email Address" required>
+                            <button type="submit" class="btn-primary">Join</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <a href="#" style="background:#3b82f6; padding: 0.8rem 1.8rem; border-radius: 40px; color: white; text-decoration: none;"><i class="fas fa-envelope"></i> Email</a>
+                <a href="#" style="background:#1DA1F2; padding: 0.8rem 1.8rem; border-radius: 40px; color: white; text-decoration: none;"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="#" style="background:#25D366; padding: 0.8rem 1.8rem; border-radius: 40px; color: white; text-decoration: none;"><i class="fab fa-whatsapp"></i> WhatsApp (limited)</a>
+            </div>
+
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">Is this a signal service? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">No. We provide educational insights and structural analysis. All trading decisions are made independently by each trader.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Do you offer a robot / EA? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">We do not sell any software. Execution is system‑assisted, but the edge comes from the MTT framework – not an automated tool.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How can I access the mentorship? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Contact via email or Telegram to discuss availability. Mentorship is limited to serious traders.</div>
+                </div>
+            </div>
+
+            <!-- Legal (professional tone) -->
+            <div style="margin-top: 3rem; text-align: center;">
+                <a href="#" style="color:#94a3b8; margin: 0 1rem;">Risk Disclosure</a>
+                <a href="#" style="color:#94a3b8; margin: 0 1rem;">Privacy Policy</a>
+                <a href="#" style="color:#94a3b8; margin: 0 1rem;">Terms & Conditions</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <a href="#performance">Performance</a>
+            <a href="#approach">Approach</a>
+            <a href="#services">Services</a>
+            <a href="#ib-partners">Partners</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Risk Warning</a>
+            <a href="#">Affiliate Disclosure</a>
+        </div>
+        <div class="copyright">
+            <p>© 2025 MTT – Precision Action Trading. All rights reserved. Forex trading involves substantial risk of loss. We do not provide financial advice.</p>
+            <p style="margin-top: 0.5rem;">*Past performance does not guarantee future results. The MTT framework is for educational and informational purposes only.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    if(mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-open');
+        });
+    }
+
+    // FAQ accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+            item.classList.toggle('active-faq');
+            const icon = question.querySelector('i');
+            if(item.classList.contains('active-faq')) {
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        });
+    });
+
+    // Access form submission (demo)
+    const accessForm = document.getElementById('accessForm');
+    if(accessForm) {
+        accessForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you! You will receive private updates via email.');
+            accessForm.reset();
+        });
+    }
+</script>
+</body>
+</html>
